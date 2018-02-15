@@ -121,7 +121,6 @@ var Board = createReactClass({
                       id={note.id} 
                       onChange={this.update} 
                       onRemove={this.remove}>
-
                         {note.note}
 
                 </Note>
@@ -136,7 +135,7 @@ var Board = createReactClass({
                 <div className='board'>
     
                     {this.state.notes.map(this.eachNote)}
-                    <button onClick={() => this.add()}>+</button>
+                    <button onClick={() => this.add('New Message')}>+ Add Note</button>
 
                 </div>
 
