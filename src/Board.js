@@ -1,6 +1,7 @@
 import React from 'react'
 import './Board.css'
 import Note from "./Note"
+
 var createReactClass = require('create-react-class')
 
  // Board class for displaying notes
@@ -50,7 +51,7 @@ var Board = createReactClass({
 
     add(text)
     {
-        text = "New Note"
+        //text = "New Note"
         var notes = [
             ...this.state.notes,
             {
@@ -87,14 +88,15 @@ var Board = createReactClass({
     {
         if(this.props.count)
         {
-            var url = `http://baconipsum.com/api/?type=all-meat?sentences={this.props.count}`
+            
+            var url = `http://api.icndb.com/jokes/random/${this.props.count}?limitTo=[nerdy]`
             fetch(url)
-                .then(results => results.json)
-                .then(array => array[0])
-                .then(text => text.split('. '))
-                .then(array => array.forEach(sentence => this.add(sentence)))
+                .then(results => results.json())
+                .then(obj => obj.value)
+                .then(array => array.forEach(item => this.add(item.joke)))
         }
     },
+    
 
     // Takes the note's id as an argument
     // Filter through the notes state of Board class

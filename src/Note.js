@@ -1,6 +1,7 @@
 import React from 'react'
 import './Board.css'
 import Draggable from 'react-draggable'
+
 var createReactClass = require('create-react-class')
 
 var Note = createReactClass({
