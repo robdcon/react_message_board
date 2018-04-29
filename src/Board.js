@@ -1,6 +1,8 @@
 import React from 'react'
 import './Board.css'
 import Note from "./Note"
+import  noticeBoardXl from "./img/notice-board-xl.png"
+
 
 var createReactClass = require('create-react-class')
 
@@ -86,14 +88,20 @@ var Board = createReactClass({
 
     componentWillMount()
     {
+
         if(this.props.count)
         {
-            
-            var url = `http://api.icndb.com/jokes/random/${this.props.count}?limitTo=[nerdy]`
-            fetch(url)
-                .then(results => results.json())
-                .then(obj => obj.value)
-                .then(array => array.forEach(item => this.add(item.joke)))
+            var count = this.props.count;
+            for (var i = 1; i <= count; i++)
+            {   
+                this.add('New Note')
+                console.log(i)
+            }
+            // var url = `http://api.icndb.com/jokes/random/${this.props.count}?limitTo=[nerdy]`
+            // fetch(url)
+            //     .then(results => results.json())
+            //     .then(obj => obj.value)
+            //     .then(array => array.forEach(item => this.add(item.joke)))
         }
     },
     
@@ -118,6 +126,7 @@ var Board = createReactClass({
             return (
 
                 <Note key={note.id} 
+        
                       id={note.id} 
                       onChange={this.update} 
                       onRemove={this.remove}>
@@ -132,7 +141,8 @@ var Board = createReactClass({
 
         return (
 
-                <div className='board'>
+                <div className='board' style={{ backgroundImage:{noticeBoardXl},
+                                                                backgroundSize:'initial' }}>
     
                     {this.state.notes.map(this.eachNote)}
                     <button onClick={() => this.add('New Message')}>+ Add Note</button>

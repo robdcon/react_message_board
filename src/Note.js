@@ -1,6 +1,7 @@
 import React from 'react'
 import './Board.css'
 import Draggable from 'react-draggable'
+import  postItNote from "./img/post-it-note.png"
 
 var createReactClass = require('create-react-class')
 
@@ -11,8 +12,10 @@ var Note = createReactClass({
     getInitialState() {
         return {editing: false}
     },
-
-   
+    background()
+    {
+        return postItNote
+    },
 
     // Method to fire before component is rendered
 
@@ -20,20 +23,18 @@ var Note = createReactClass({
     {      
       
         this.style = { // Set random position of each note
+
+            //backgroundImage:"url('./img/post-it-note.png')",
+            backgroundImage : `url(${this.background()})`,
         
             right:this.randomPosition(0, window.innerWidth - 150, 'px'),
             top:this.randomPosition(0, window.innerHeight - 150, 'px')
         }
 
     },
-
-    // Method to fire after component is rendered
-
     componentDidMount()
     {
-        
-
-        
+       
     },
 
     // Method to fire after component has updated
@@ -115,7 +116,7 @@ var Note = createReactClass({
     {
       return (
 
-      <Draggable>
+      <Draggable enableUserSelectHack={false}>
       {
         (this.state.editing) ? this.renderForm()
                              : this.renderDisplay()
