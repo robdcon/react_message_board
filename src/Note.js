@@ -21,8 +21,6 @@ const priorityLevels =
     },
 ]
 
-console.log(priorityLevels[0])
-
 var createReactClass = require('create-react-class')
 
 var Note = createReactClass({
@@ -32,7 +30,7 @@ var Note = createReactClass({
     getInitialState() {
         return {
             editing: false,
-            priorityLevel:1
+            priorityLevel:this.props.priorityLevel
         }
     },
     background()
@@ -61,32 +59,35 @@ var Note = createReactClass({
        
     },
 
-     increasePriority()
-    {
-        console.log('plus')
-      this.setState((prevState) => {
-          return{ priorityLevel: prevState.priorityLevel + 1}
-      })
+    // increasePriority()
+    // {
+    //     console.log('plus')
+    //     this.setState((prevState) => {
+    //     return{ priorityLevel: (prevState.priorityLevel + 1 > 2) ? 0 : prevState.priorityLevel + 1}
+    //   })
        
-    },
-   decreasePriority()
-    {
-        console.log('minus')
-      this.setState((prevState) => {
-          return{ priorityLevel: prevState.priorityLevel - 1}
-      })
+    // },
+
+    // decreasePriority()
+    // {
+    //     console.log('minus')
+    //     this.setState((prevState) => {
+    //     return{ priorityLevel:  (prevState.priorityLevel - 1 < 0) ? 3 : prevState.priorityLevel - 1}
+    //   })
        
-    },
+    // },
 
     // Method to fire after component has updated
 
-    componentDidUpdate()
+    componentDidUpdate(prevProps, prevState)
     {
         if(this.state.editing)
         {
             this.refs.newText.focus()
             this.refs.newText.select()
         }
+        this.style.backgroundImage = `url(${this.background()})`
+        
     },
 
     // Prevent unnecessary re-rendering if no change has been made
@@ -117,6 +118,7 @@ var Note = createReactClass({
     {
         
         this.props.onChange(this.refs.newText.value, this.props.id)
+        
         this.setState({editing:false})
     },
 
@@ -125,6 +127,31 @@ var Note = createReactClass({
     remove() 
     {
         this.props.onRemove(this.props.id)
+    },
+
+    increasePriority(id)
+    {
+        this.setState((prevState) => 
+        {
+             return {priorityLevel:(prevState.priorityLevel + 1 > 2) ? 0 : prevState.priorityLevel + 1}
+        }, () =>
+        {
+            this.props.onPriorityChange(this.state.priorityLevel, this.props.id)
+        });
+       
+       
+    },
+    decreasePriority(id)
+    {
+       
+        this.setState((prevState) => 
+        {
+             return {priorityLevel:(prevState.priorityLevel - 1 < 0) ? 2 : prevState.priorityLevel - 1}
+        }, () =>
+        {
+            this.props.onPriorityChange(this.state.priorityLevel, this.props.id)
+        });
+       
     },
 
     // Return a text area input field to add new text to
@@ -150,8 +177,8 @@ var Note = createReactClass({
                   <button onClick={this.remove}>X</button>
                 </span>
                 <div>
-                     <button onClick={() => this.increasePriority()}>+</button>
-                    <button onClick={() => this.decreasePriority()}>-</button>
+                     <button onClick={this.increasePriority}>+</button>
+                    <button onClick={this.decreasePriority}>-</button>
                 </div>
             </div>
             )

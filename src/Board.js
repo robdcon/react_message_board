@@ -127,38 +127,24 @@ var Board = createReactClass({
         this.setState({notes});
        
     },
-    // increasePriority(priorityLevel, id)
-    // {
-    //    const newLevel = priorityLevel++
-    //     var notes = this.state.notes.map(
+   
 
-    //         note => (note.id !== id) ?
-    //         note : 
-    //             {
-    //                 ...note,
-    //                 priorityLevel:newLevel
-    //             }
+    updatePriority(priorityLevel, id)
+    {
+        const newLevel = priorityLevel--
+        var notes = this.state.notes.map(
 
-    //         )
-    //     this.setState({notes});
+            note => (note.id !== id) ?
+            note : 
+                {
+                    ...note,
+                    priorityLevel:newLevel
+                }
+
+            )
+        this.setState({notes});
        
-    // },
-    // decreasePriority(priorityLevel, id)
-    // {
-    //     const newLevel = priorityLevel--
-    //     var notes = this.state.notes.map(
-
-    //         note => (note.id !== id) ?
-    //         note : 
-    //             {
-    //                 ...note,
-    //                 priorityLevel:newLevel
-    //             }
-
-    //         )
-    //     this.setState({notes});
-       
-    // },
+    },
 
     componentWillMount()
     {
@@ -212,6 +198,10 @@ var Board = createReactClass({
             console.log('not updated')
             alert('error, not saved to local')
         }
+        if(prevState.priorityLevel !== this.state.priorityLevel)
+        {
+            console.log('update priority')
+        }
     },
     
 
@@ -248,7 +238,7 @@ var Board = createReactClass({
                       priorityLevel={note.priorityLevel}
                       onChange={this.update} 
                       onRemove={this.remove}
-                      onPrioritise={this.updatePriority}
+                      onPriorityChange={this.updatePriority}
                       >
                         {
                             note.note
