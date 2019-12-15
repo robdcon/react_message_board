@@ -59,7 +59,8 @@ var Board = createReactClass({
             ...this.state.notes,
             {
                 id:this.nextId(),
-                note:text
+                note:text,
+                priorityLevel:1
 
             }
         ]
