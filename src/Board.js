@@ -119,27 +119,47 @@ var Board = createReactClass({
 
             )
         this.setState({notes});
-        this.saveNotesToLocal()
+       
     },
 
     componentWillMount()
     {
 
-        if(this.props.count)
-        {
-            var count = this.props.count;
-            for (var i = 1; i <= count; i++)
-            {   
-                this.add('New Note')
-                console.log(i)
-            }
-            // var url = `http://api.icndb.com/jokes/random/${this.props.count}?limitTo=[nerdy]`
-            // fetch(url)
-            //     .then(results => results.json())
-            //     .then(obj => obj.value)
-            //     .then(array => array.forEach(item => this.add(item.joke)))
-        }
+        const notes = JSON.parse(localStorage.getItem('message_board_notes'))
+        this.setState({
+            notes:notes
+        })
+        
+
+        // if(this.props.count)
+        // {
+        //     var count = this.props.count;
+        //     for (var i = 1; i <= count; i++)
+        //     {   
+        //         this.add('New Note')
+        //         console.log(i)
+        //     }
+        //     // var url = `http://api.icndb.com/jokes/random/${this.props.count}?limitTo=[nerdy]`
+        //     // fetch(url)
+        //     //     .then(results => results.json())
+        //     //     .then(obj => obj.value)
+        //     //     .then(array => array.forEach(item => this.add(item.joke)))
+        // }
        
+    },
+
+    componentDidUpdate(prevState, state)
+    {
+        if(prevState.notes !== this.state.notes)
+        {
+            console.log('updated')
+            this.saveNotesToLocal()
+        }
+        else
+        {
+            console.log('not updated')
+            alert('error, not saved to local')
+        }
     },
     
 
