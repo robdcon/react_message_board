@@ -52,15 +52,14 @@ var Board = createReactClass({
 
     // Add a note to the Board
 
-    add(text, priorityLevel)
+    add(text)
     {
         //text = "New Note"
         var notes = [
             ...this.state.notes,
             {
                 id:this.nextId(),
-                note:text,
-                priorityLevel:priorityLevel
+                note:text
 
             }
         ]
@@ -128,21 +127,38 @@ var Board = createReactClass({
         this.setState({notes});
        
     },
-    updatePriority(priorityLevel, id)
-    {
-        var notes = this.state.notes.map(
+    // increasePriority(priorityLevel, id)
+    // {
+    //    const newLevel = priorityLevel++
+    //     var notes = this.state.notes.map(
 
-            note => (note.id !== id) ?
-            note : 
-                {
-                    ...note,
-                    priority:priorityLevel
-                }
+    //         note => (note.id !== id) ?
+    //         note : 
+    //             {
+    //                 ...note,
+    //                 priorityLevel:newLevel
+    //             }
 
-            )
-        this.setState({notes});
+    //         )
+    //     this.setState({notes});
        
-    },
+    // },
+    // decreasePriority(priorityLevel, id)
+    // {
+    //     const newLevel = priorityLevel--
+    //     var notes = this.state.notes.map(
+
+    //         note => (note.id !== id) ?
+    //         note : 
+    //             {
+    //                 ...note,
+    //                 priorityLevel:newLevel
+    //             }
+
+    //         )
+    //     this.setState({notes});
+       
+    // },
 
     componentWillMount()
     {
@@ -251,7 +267,8 @@ var Board = createReactClass({
                                                                 backgroundSize:'initial' }}>
     
                     {(this.state.notes.length > 0) ? this.state.notes.map(this.eachNote) : null}
-                    <button onClick={() => this.add('New Message', 0)}>+ Add Note</button>
+                    <button onClick={() => this.add('New Message')}>+ Add Note</button>
+                    
 
                 </div>
 
