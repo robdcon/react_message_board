@@ -36,7 +36,8 @@ var Board = createReactClass({
     {
         return {
 
-            notes: []
+            notes: [],
+            count:0
             
         }
     }, 
@@ -45,20 +46,21 @@ var Board = createReactClass({
 
     nextId()
     {
-            this.uniqueId = this.uniqueId || 0
-            return this.uniqueId++
+            this.state.uniqueId = this.state.uniqueId || 0
+            return this.state.uniqueId++
     },
 
     // Add a note to the Board
 
-    add(text)
+    add(text, priorityLevel)
     {
         //text = "New Note"
         var notes = [
             ...this.state.notes,
             {
                 id:this.nextId(),
-                note:text
+                note:text,
+                priorityLevel:priorityLevel
 
             }
         ]
@@ -94,7 +96,12 @@ var Board = createReactClass({
 
     saveNotesToLocal()
     {
-        const jsonNotes = JSON.stringify(this.state.notes)
+        const board = 
+        {
+            uniqueId: this.state.uniqueId || 0,
+            notes: this.state.notes
+        }
+        const jsonNotes = JSON.stringify(board)
         localStorage.setItem('message_board_notes', jsonNotes);
         console.log('saved')
     },
@@ -121,11 +128,40 @@ var Board = createReactClass({
         this.setState({notes});
        
     },
+    updatePriority(priorityLevel, id)
+    {
+        var notes = this.state.notes.map(
+
+            note => (note.id !== id) ?
+            note : 
+                {
+                    ...note,
+                    priority:priorityLevel
+                }
+
+            )
+        this.setState({notes});
+       
+    },
 
     componentWillMount()
     {
 
-        const notes = JSON.parse(localStorage.getItem('message_board_notes'))
+        const board = JSON.parse(localStorage.getItem('message_board_notes'))
+
+        if(!board) return
+      
+        const notes = board.notes   
+       
+        if(!notes.length > 0)
+        {
+            console.log('no notes')
+            return
+        }
+        else
+        {
+            console.log(notes)
+        }
         this.setState({
             notes:notes
         })
@@ -173,6 +209,14 @@ var Board = createReactClass({
             this.setState({notes})
     },
 
+    clearAllNotes()
+    {
+        this.setState({
+            notes:[]
+        })
+        localStorage.setItem('message-board-notes', "")
+    },
+
     // Return an instance of Note
     // Set the key and id to note.id
     // Set methods to handle updating and removing notes
@@ -185,9 +229,14 @@ var Board = createReactClass({
                 <Note key={note.id} 
         
                       id={note.id} 
+                      priorityLevel={note.priorityLevel}
                       onChange={this.update} 
-                      onRemove={this.remove}>
-                        {note.note}
+                      onRemove={this.remove}
+                      onPrioritise={this.updatePriority}
+                      >
+                        {
+                            note.note
+                        }
 
                 </Note>
 
@@ -201,8 +250,8 @@ var Board = createReactClass({
                 <div className='board' style={{ backgroundImage:{noticeBoardXl},
                                                                 backgroundSize:'initial' }}>
     
-                    {this.state.notes.map(this.eachNote)}
-                    <button onClick={() => this.add('New Message')}>+ Add Note</button>
+                    {(this.state.notes.length > 0) ? this.state.notes.map(this.eachNote) : null}
+                    <button onClick={() => this.add('New Message', 0)}>+ Add Note</button>
 
                 </div>
 
