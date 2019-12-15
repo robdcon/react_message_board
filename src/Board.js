@@ -155,6 +155,7 @@ var Board = createReactClass({
         if(!board) return
       
         const notes = board.notes   
+        const id = board.uniqueId
        
         if(!notes.length > 0)
         {
@@ -166,7 +167,8 @@ var Board = createReactClass({
             console.log(notes)
         }
         this.setState({
-            notes:notes
+            notes:notes,
+            uniqueId:id
         })
         
 
