@@ -65,6 +65,41 @@ var Board = createReactClass({
         this.setState({notes})
     },
 
+    checkLocalStorage()
+    {
+        if (typeof localStorage !== 'undefined') {
+            try {
+                localStorage.setItem('feature_test', 'yes');
+                if (localStorage.getItem('feature_test') === 'yes') {
+                    localStorage.removeItem('feature_test');
+                    // localStorage is enabled
+                    console.log('Local Enabled')
+                    return true
+                } else {
+                    // localStorage is disabled
+                    console.log('Local Disabled')
+                    return false
+                }
+            } catch(e) {
+                // localStorage is disabled
+                console.log('Local Disabled', e)
+                return false
+            }
+        } else {
+            // localStorage is not available
+            console.log('Local Not Available')
+            return false
+        }
+    },
+
+    saveNotesToLocal()
+    {
+        const jsonNotes = JSON.stringify(this.state.notes)
+        localStorage.setItem('message_board_notes', jsonNotes);
+        console.log('saved')
+    },
+
+
     // Update the array of notes in the Board class's state
     // Map through each note using a callback function
     // If the note ID is not equal to the current note return note
@@ -84,24 +119,46 @@ var Board = createReactClass({
 
             )
         this.setState({notes});
+       
     },
 
     componentWillMount()
     {
 
-        if(this.props.count)
+        const notes = JSON.parse(localStorage.getItem('message_board_notes'))
+        this.setState({
+            notes:notes
+        })
+        
+
+        // if(this.props.count)
+        // {
+        //     var count = this.props.count;
+        //     for (var i = 1; i <= count; i++)
+        //     {   
+        //         this.add('New Note')
+        //         console.log(i)
+        //     }
+        //     // var url = `http://api.icndb.com/jokes/random/${this.props.count}?limitTo=[nerdy]`
+        //     // fetch(url)
+        //     //     .then(results => results.json())
+        //     //     .then(obj => obj.value)
+        //     //     .then(array => array.forEach(item => this.add(item.joke)))
+        // }
+       
+    },
+
+    componentDidUpdate(prevState, state)
+    {
+        if(prevState.notes !== this.state.notes)
         {
-            var count = this.props.count;
-            for (var i = 1; i <= count; i++)
-            {   
-                this.add('New Note')
-                console.log(i)
-            }
-            // var url = `http://api.icndb.com/jokes/random/${this.props.count}?limitTo=[nerdy]`
-            // fetch(url)
-            //     .then(results => results.json())
-            //     .then(obj => obj.value)
-            //     .then(array => array.forEach(item => this.add(item.joke)))
+            console.log('updated')
+            this.saveNotesToLocal()
+        }
+        else
+        {
+            console.log('not updated')
+            alert('error, not saved to local')
         }
     },
     
