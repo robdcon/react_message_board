@@ -9,7 +9,7 @@
     "react-dom": "^16.0.0",
     "react-draggable": "^3.0.5",
     "react-media": "^1.8.0",
-    "react-scripts": "1.0.14"
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
